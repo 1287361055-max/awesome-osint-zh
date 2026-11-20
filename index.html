@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Awesome OSINT · 中文可视化导航</title>
+<link rel="icon" type="image/svg+xml" href="assets/osint-logo.svg" />
+<meta name="description" content="开源情报（OSINT）工具与资源精选清单 · 简体中文版可视化导航，支持分类浏览与全文搜索" />
+<style>
+:root{--topbar-h:66px;--sidebar-w:252px;--radius:10px}
+:root[data-theme="light"]{
+  --bg:#f6f8fa;--surface:#ffffff;--surface2:#f6f8fa;--border:#d0d7de;
+  --text:#1f2328;--muted:#656d76;--accent:#0969da;--accent-soft:#ddf4ff;
+  --shadow:0 1px 3px rgba(31,35,40,.08),0 1px 2px rgba(31,35,40,.04);--hover:#f3f6f9;
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;--accent-soft:#122a45;
+  --shadow:0 1px 3px rgba(0,0,0,.45);--hover:#21262d;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif}
+a{color:var(--accent);text-decoration:none}
+[hidden]{display:none !important}
+button{font-family:inherit;cursor:pointer}
+
+/* ---------- 顶栏 ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow)}
+.topbar-inner{max-width:1560px;margin:0 auto;height:var(--topbar-h);display:flex;align-items:center;gap:18px;padding:0 20px}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand-logo{width:34px;height:34px;object-fit:contain;border-radius:6px}
+.brand-title{font-size:16px;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.badge-zh{display:inline-block;margin-left:6px;padding:1px 7px;font-size:11px;font-weight:600;
+  color:var(--accent);background:var(--accent-soft);border-radius:20px;vertical-align:2px}
+.brand-sub{font-size:11px;color:var(--muted);white-space:nowrap}
+.search-wrap{position:relative;flex:1;max-width:520px;margin-left:auto}
+.search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;
+  fill:var(--muted);pointer-events:none}
+#search{width:100%;height:38px;padding:0 34px 0 34px;border:1px solid var(--border);border-radius:8px;
+  background:var(--surface2);color:var(--text);font-size:13px;outline:none;transition:.15s}
+#search:focus{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-soft)}
+#search::placeholder{color:var(--muted)}
+.clear-btn{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:24px;height:24px;
+  border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;border-radius:5px}
+.clear-btn:hover{background:var(--hover);color:var(--text)}
+.actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.stat{font-size:12px;color:var(--muted);white-space:nowrap;margin-right:4px}
+.stat b{color:var(--text)}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 11px;
+  border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--text);
+  font-size:12px;white-space:nowrap;transition:.15s}
+.icon-btn:hover{background:var(--hover);border-color:var(--accent);color:var(--accent)}
+.menu-btn{display:none;width:34px;padding:0;font-size:15px}
+
+/* ---------- 布局 ---------- */
+.layout{max-width:1560px;margin:0 auto;display:flex;align-items:flex-start}
+.sidebar{position:sticky;top:var(--topbar-h);width:var(--sidebar-w);flex-shrink:0;
+  height:calc(100vh - var(--topbar-h));overflow-y:auto;border-right:1px solid var(--border);
+  background:var(--surface);padding:16px 10px 24px}
+.sidebar-head{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;
+  padding:0 10px 10px;text-transform:uppercase}
+.sidebar-head span{float:right;font-weight:400;letter-spacing:0}
+.nav-item{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;
+  border-radius:6px;color:var(--text);font-size:12.5px;line-height:1.45;transition:.12s}
+.nav-item:hover{background:var(--hover);color:var(--accent)}
+.nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.nav-item.lv3{padding-left:24px;font-size:12px;color:var(--muted)}
+.nav-item.lv3.active{color:var(--accent)}
+.nav-num{font-size:10.5px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:0 6px;min-width:26px;text-align:center;flex-shrink:0}
+.nav-item.active .nav-num{background:var(--surface);color:var(--accent);border-color:var(--accent)}
+.sidebar-foot{margin:18px 10px 0;padding-top:14px;border-top:1px solid var(--border);
+  font-size:11px;color:var(--muted);line-height:1.8}
+
+.content{flex:1;min-width:0;padding:24px 28px 60px}
+.result-bar{margin-bottom:18px;padding:10px 14px;background:var(--accent-soft);color:var(--text);
+  border:1px solid var(--border);border-radius:8px;font-size:13px}
+.sec{margin-bottom:34px;scroll-margin-top:calc(var(--topbar-h) + 14px)}
+.sec-title{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);font-size:19px;font-weight:700}
+.anchor{color:var(--muted);font-weight:400;font-size:15px;opacity:0;transition:.15s}
+.sec-title:hover .anchor{opacity:1}
+.sec-count{margin-left:auto;font-size:11px;font-weight:500;color:var(--muted);
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;gap:6px;padding:13px 15px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+  color:var(--text);transition:.15s;min-height:76px}
+.card:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 6px 18px rgba(9,105,218,.13);text-decoration:none}
+.card-name{font-size:13.5px;font-weight:650;color:var(--accent);word-break:break-word;line-height:1.45}
+.arrow{font-size:11px;margin-left:5px;opacity:.5}
+.card:hover .arrow{opacity:1}
+.card-desc{font-size:12.2px;color:var(--muted);line-height:1.6;word-break:break-word}
+.muted-desc{font-style:italic;opacity:.75}
+.empty{text-align:center;padding:70px 20px;color:var(--muted)}
+.empty .big{font-size:40px;margin-bottom:10px}
+.footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);
+  font-size:11.5px;color:var(--muted);line-height:1.9}
+.to-top{position:fixed;right:22px;bottom:22px;width:40px;height:40px;border:1px solid var(--border);
+  border-radius:50%;background:var(--surface);color:var(--text);font-size:18px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:.2s;z-index:45}
+.to-top.show{opacity:1;pointer-events:auto}
+.to-top:hover{border-color:var(--accent);color:var(--accent)}
+
+@media (max-width:1000px){
+  .brand-sub,.stat{display:none}
+  .sidebar{position:fixed;left:0;top:var(--topbar-h);bottom:0;z-index:40;width:270px;
+    transform:translateX(-102%);transition:transform .25s;box-shadow:8px 0 24px rgba(0,0,0,.16)}
+  .sidebar.open{transform:none}
+  .menu-btn{display:inline-flex}
+  .content{padding:20px 16px 50px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+}
+@media (max-width:620px){
+  .topbar-inner{gap:10px;padding:0 12px}
+  .brand-title{font-size:14px}
+  .badge-zh{display:none}
+  .actions .icon-btn:not(#themeBtn):not(#menuBtn){display:none}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <img class="brand-logo" src="assets/osint-logo.svg" alt="OSINT" />
+      <div>
+        <div class="brand-title">Awesome OSINT <span class="badge-zh">简体中文版</span></div>
+        <div class="brand-sub">开源情报工具与资源精选 · 可视化导航</div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.5 7a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0zm-.9 4.2a6 6 0 1 1 1.1-1.1l3.1 3.1-1.1 1.1-3.1-3.1z"/></svg>
+      <input id="search" type="search" placeholder="搜索工具名称、功能或分类…  （按 / 快速聚焦）" autocomplete="off" />
+      <button id="clear" class="clear-btn" title="清空搜索" hidden>&times;</button>
+    </div>
+    <div class="actions">
+      <span id="stat" class="stat"></span>
+      <a class="icon-btn" href="README.md" title="查看完整清单">完整清单</a>
+      <a class="icon-btn" href="https://github.com/jivoi/awesome-osint" target="_blank" rel="noopener noreferrer" title="上游原项目">上游项目 ↗</a>
+      <button id="themeBtn" class="icon-btn" title="切换深浅主题">🌙</button>
+      <button id="menuBtn" class="icon-btn menu-btn" title="展开分类目录">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">分类目录 <span id="navCount"></span></div>
+    <nav id="nav"></nav>
+    <div class="sidebar-foot">
+      基于 <a href="https://github.com/jivoi/awesome-osint" target="_blank" rel="noopener noreferrer">jivoi/awesome-osint</a> 汉化改编<br />
+      CC BY-SA 4.0 · 仅供合法合规的安全研究与学习使用
+    </div>
+  </aside>
+
+  <main class="content">
+    <div id="resultBar" class="result-bar" hidden></div>
+    <div id="sections"></div>
+    <div id="empty" class="empty" hidden>
+      <div class="big">🔍</div>
+      <div>没有找到匹配的资源，换个关键词试试</div>
+    </div>
+    <footer class="footer">
+      本页数据由仓库内 <code>README.md</code> 自动生成，与原清单保持同步。工具均为第三方站点，本仓库不对其内容、可用性与合规性负责，请在获得授权的前提下合法使用。<br />
+      上游项目：<a href="https://github.com/jivoi/awesome-osint" target="_blank" rel="noopener noreferrer">jivoi/awesome-osint</a> · 许可证：<a href="LICENSE.txt">CC BY-SA 4.0</a> · <a href="README.en.md">English version</a>
+    </footer>
+  </main>
+</div>
+
+<button id="toTop" class="to-top" title="回到顶部">↑</button>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  var D = window.OSINT_DATA || [];
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  var safeUrl = function (u) { return /^https?:\/\//i.test(u || '') ? u : '#'; };
+
+  var navHtml = [], secHtml = [], total = 0;
+  D.forEach(function (s) {
+    total += s.a.length;
+    navHtml.push('<a class="nav-item lv' + s.l + '" href="#' + s.i + '" data-target="' + s.i + '">' +
+      '<span>' + esc(s.t) + '</span><span class="nav-num">' + s.a.length + '</span></a>');
+    var cards = '';
+    s.a.forEach(function (it) {
+      var name = it[0], url = it[1], desc = it[2] || '';
+      var key = (name + ' ' + desc + ' ' + s.t).toLowerCase();
+      cards += '<a class="card" href="' + esc(safeUrl(url)) + '" target="_blank" rel="noopener noreferrer" data-key="' + esc(key) + '">' +
+        '<div class="card-name">' + esc(name) + '<span class="arrow">↗</span></div>' +
+        (desc ? '<div class="card-desc">' + esc(desc) + '</div>'
+              : '<div class="card-desc muted-desc">暂无说明，点击访问</div>') +
+        '</a>';
+    });
+    secHtml.push('<section class="sec" id="' + s.i + '">' +
+      '<h2 class="sec-title"><a class="anchor" href="#' + s.i + '">#</a>' + esc(s.t) +
+      '<span class="sec-count">' + s.a.length + ' 个资源</span></h2>' +
+      '<div class="grid">' + cards + '</div></section>');
+  });
+  document.getElementById('nav').innerHTML = navHtml.join('');
+  document.getElementById('sections').innerHTML = secHtml.join('');
+  document.getElementById('stat').innerHTML = '<b>' + D.length + '</b> 个分类 · <b>' + total + '</b> 个资源';
+  document.getElementById('navCount').textContent = D.length + ' 类';
+
+  // 搜索过滤
+  var input = document.getElementById('search');
+  var clearBtn = document.getElementById('clear');
+  var resultBar = document.getElementById('resultBar');
+  var empty = document.getElementById('empty');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var secs = Array.prototype.slice.call(document.querySelectorAll('.sec'));
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var hit = 0, shown = 0;
+    cards.forEach(function (c) {
+      var ok = !q || c.getAttribute('data-key').indexOf(q) !== -1;
+      c.hidden = !ok;
+      if (ok) hit++;
+    });
+    secs.forEach(function (s) {
+      var vis = s.querySelectorAll('.card:not([hidden])').length;
+      s.hidden = !!q && vis === 0;
+      if (!s.hidden) shown++;
+    });
+    clearBtn.hidden = !input.value;
+    resultBar.hidden = !q;
+    if (q) resultBar.innerHTML = '搜索「<b>' + esc(input.value.trim()) + '</b>」：匹配到 <b>' + hit + '</b> 个资源，分布于 ' + shown + ' 个分类';
+    empty.hidden = hit > 0;
+  }
+  input.addEventListener('input', apply);
+  clearBtn.addEventListener('click', function () { input.value = ''; apply(); input.focus(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); }
+    if (e.key === 'Escape' && document.activeElement === input) { input.value = ''; apply(); input.blur(); }
+  });
+
+  // 主题切换
+  var root = document.documentElement, themeBtn = document.getElementById('themeBtn');
+  try { var saved = localStorage.getItem('osint-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  function syncTheme() { themeBtn.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  syncTheme();
+  themeBtn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('osint-theme', next); } catch (e) {}
+    syncTheme();
+  });
+
+  // 移动端分类抽屉
+  var sidebar = document.getElementById('sidebar');
+  document.getElementById('menuBtn').addEventListener('click', function () { sidebar.classList.toggle('open'); });
+  document.getElementById('nav').addEventListener('click', function (e) {
+    if (e.target.closest('.nav-item')) sidebar.classList.remove('open');
+  });
+
+  // 侧栏当前分类高亮
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
+  if ('IntersectionObserver' in window) {
+    var ob = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        navItems.forEach(function (n) { n.classList.toggle('active', n.getAttribute('data-target') === en.target.id); });
+      });
+    }, { rootMargin: '-80px 0px -68% 0px' });
+    secs.forEach(function (s) { ob.observe(s); });
+  }
+
+  // 回到顶部
+  var toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', function () { toTop.classList.toggle('show', window.scrollY > 420); });
+  toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+</body>
+</html>
