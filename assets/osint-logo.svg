@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="OSINT 中文版图标">
+  <rect width="120" height="120" rx="24" fill="#0969da"/>
+  <circle cx="52" cy="50" r="26" fill="none" stroke="#ffffff" stroke-width="7"/>
+  <path d="M71 69 L96 94" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <g stroke="#ffffff" stroke-width="2" opacity=".5">
+    <path d="M52 50 L38 40 M52 50 L66 38 M52 50 L40 63 M52 50 L64 62 M38 40 L40 63 M66 38 L64 62"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="52" cy="50" r="5.5"/>
+    <circle cx="38" cy="40" r="3.6" opacity=".9"/>
+    <circle cx="66" cy="38" r="3.6" opacity=".9"/>
+    <circle cx="40" cy="63" r="3.6" opacity=".9"/>
+    <circle cx="64" cy="62" r="3.6" opacity=".9"/>
+  </g>
+</svg>
